@@ -1,3 +1,64 @@
+<script>
+export default {
+   data() {
+      return {
+         index: 1,
+         product: {},
+         loading: false,
+      };
+   },
+   methods: {
+      async getProduct() {
+         this.loading = true;
+         const response = await fetch(`https://fakestoreapi.com/products/${this.index}`);
+         const responseJson = await response.json();
+
+         if (responseJson.category === `men's clothing` || responseJson.category === `women's clothing`) {
+            this.product = responseJson;
+         } else {
+            this.product = {}
+         }
+         this.loading = false;
+      },
+      nextProduct() {
+         this.index = this.index % 20 + 1;
+         this.getProduct();
+      },
+   },
+   computed: {
+      containerClasses() {
+         return {
+            'bg-blue': this.product.category === "men's clothing",
+            'bg-pink': this.product.category === "women's clothing",
+            'bg-gray': !['men\'s clothing', 'women\'s clothing'].includes(this.product.category),
+         };
+      },
+      isProductUnavailable() {
+         return !['men\'s clothing', 'women\'s clothing'].includes(this.product.category);
+      },
+      getTitleClass() {
+         return this.product.category === `men's clothing` ? 'font-navy' : 'font-magenta';
+      },
+      getRatingClass() {
+         return this.product.category === `men's clothing` ? 'circle bg-navy' : 'circle bg-magenta';
+      },
+      getPriceClass() {
+         return this.product.category === `men's clothing` ? 'font-navy' : 'font-magenta';
+      },
+      getBuyButtonClass() {
+         return this.product.category === `men's clothing` ? 'bg-navy' : 'bg-magenta';
+      },
+      getNextButtonClass() {
+         const buttonClass = this.product.category === `men's clothing` ? 'border-navy font-navy' : 'border-magenta font-magenta';
+         return Array.isArray(buttonClass) ? buttonClass : [buttonClass];
+      },
+   },
+   mounted() {
+      this.getProduct();
+   },
+};
+</script>
+
 <template>
    <div class="container">
       <div class="container" :class="containerClasses">
@@ -71,64 +132,4 @@
       </div>
    </div>
 </template>
-
- 
-<script>
-export default {
-   data() {
-      return {
-         index: 1,
-         product: {},
-         loading: false,
-      };
-   },
-   methods: {
-      async getProduct() {
-         this.loading = true;
-         const response = await fetch(`https://fakestoreapi.com/products/${this.index}`);
-         const responseJson = await response.json();
-
-         if (responseJson.category === `men's clothing` || responseJson.category === `women's clothing`) {
-            this.product = responseJson;
-         }
-         this.loading = false;
-      },
-      nextProduct() {
-         this.index = this.index % 20 + 1;
-         this.getProduct();
-      },
-   },
-   computed: {
-      containerClasses() {
-         return {
-            'bg-blue': this.product.category === "men's clothing",
-            'bg-pink': this.product.category === "women's clothing",
-            'bg-gray': !['men\'s clothing', 'women\'s clothing'].includes(this.product.category),
-         };
-      },
-      isProductUnavailable() {
-         return !['men\'s clothing', 'women\'s clothing'].includes(this.product.category);
-      },
-      getTitleClass() {
-         return this.product.category === `men's clothing` ? 'font-navy' : 'font-magenta';
-      },
-      getRatingClass() {
-         return this.product.category === `men's clothing` ? 'circle bg-navy' : 'circle bg-magenta';
-      },
-      getPriceClass() {
-         return this.product.category === `men's clothing` ? 'font-navy' : 'font-magenta';
-      },
-      getBuyButtonClass() {
-         return this.product.category === `men's clothing` ? 'bg-navy' : 'bg-magenta';
-      },
-      getNextButtonClass() {
-         const buttonClass = this.product.category === `men's clothing` ? 'border-navy font-navy' : 'border-magenta font-magenta';
-         return Array.isArray(buttonClass) ? buttonClass : [buttonClass];
-      },
-   },
-   mounted() {
-      this.getProduct();
-   },
-};
-</script>
  
