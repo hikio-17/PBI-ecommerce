@@ -1,5 +1,8 @@
 # ecommerce
 
+## Demo
+[ecommerce-catalog](https://ecommerce-api-9f7ae.web.app/)
+
 ## Project setup
 ```
 npm install
