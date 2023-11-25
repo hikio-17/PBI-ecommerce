@@ -86,7 +86,11 @@ export default {
       async getProduct() {
          this.loading = true;
          const response = await fetch(`https://fakestoreapi.com/products/${this.index}`);
-         this.product = await response.json();
+         const responseJson = await response.json();
+
+         if (responseJson.category === `men's clothing` || responseJson.category === `women's clothing`) {
+            this.product = responseJson;
+         }
          this.loading = false;
       },
       nextProduct() {
